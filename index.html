@@ -102,12 +102,25 @@
   .key b{color:var(--accent);font-weight:400;min-width:62px;letter-spacing:.06em}
   .key span{color:var(--muted)}
 
+  /* ---------- support ---------- */
+  .support{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(20px,4vw,54px);
+    align-items:center;margin-top:30px;border:1px solid var(--line);background:var(--panel);
+    padding:clamp(22px,3.4vw,34px);position:relative}
+  .support::before,.support::after{content:"";position:absolute;width:9px;height:9px;pointer-events:none}
+  .support::before{top:4px;left:4px;border-top:1px solid var(--accent);border-left:1px solid var(--accent)}
+  .support::after{bottom:4px;right:4px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent)}
+  @media(max-width:700px){.support{grid-template-columns:1fr}}
+  .support h3{font-size:14px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+  .support p{color:var(--muted);max-width:62ch}
+
   /* ---------- closing ---------- */
   .close{text-align:center;padding:clamp(52px,9vw,104px) 0}
   .close h2{font-size:clamp(24px,4.4vw,44px);line-height:1.05;letter-spacing:-.03em;
     text-transform:uppercase;font-weight:700;margin:14px 0 20px}
   footer{padding:26px var(--pad) 40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;
     font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  footer a{color:var(--muted);transition:color .15s}
+  footer a:hover{color:var(--text)}
   footer .sep{margin-left:auto}
 </style>
 </head>
@@ -124,6 +137,7 @@
   <nav>
     <a class="lnk opt" href="#funktionen">Funktionen</a>
     <a class="lnk" href="#tutorial">Tutorial</a>
+    <a class="lnk opt" href="#spenden">Spenden</a>
     <a class="btn pri" href="app.html">Tool starten</a>
   </nav>
 </header>
@@ -241,6 +255,24 @@
     </div>
   </section>
 
+  <!-- ============ UNTERSTUETZEN ============ -->
+  <section id="spenden">
+    <div class="wrap">
+      <p class="eyebrow">Unterstützen</p>
+      <div class="support">
+        <div>
+          <h3>Free Mapper bleibt kostenlos</h3>
+          <p>Keine Lizenz, kein Abo, kein Wasserzeichen. Wenn dir das Werkzeug bei einem Projekt
+            geholfen hat, kannst du die Weiterentwicklung mit einer Spende unterstützen —
+            freiwillig und in jeder Höhe.</p>
+        </div>
+        <!-- ↓↓↓ KO-FI-LINK HIER EINTRAGEN ↓↓↓ -->
+        <a class="btn pri" href="https://ko-fi.com/bubadesign" target="_blank" rel="noopener">Auf Ko-fi unterstützen</a>
+        <!-- ↑↑↑ KO-FI-LINK HIER EINTRAGEN ↑↑↑ -->
+      </div>
+    </div>
+  </section>
+
   <!-- ============ CLOSE ============ -->
   <div class="wrap close">
     <p class="eyebrow">Bereit</p>
@@ -252,7 +284,8 @@
 
 <footer>
   <span>Free Mapper</span>
-  <span>Projection Mapping im Browser</span>
+  <a href="impressum.html">Impressum &amp; Datenschutz</a>
+  <a href="#spenden">Spenden</a>
   <span class="sep">Benötigt WebGL · Chrome oder Safari</span>
 </footer>
 
