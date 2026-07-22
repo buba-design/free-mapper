@@ -42,12 +42,20 @@
   .btn:hover{background:rgba(255,255,255,.1);border-color:var(--text)}
   .btn.pri{background:var(--accent);border-color:var(--accent);color:#00161a;font-weight:700}
   .btn.pri:hover{filter:brightness(1.09);background:var(--accent)}
+  .btn.don{background:var(--accent);border-color:var(--accent);color:#00161a;font-weight:700}
+  .btn.don:hover{filter:brightness(1.09);background:var(--accent)}
+  .btn.don span[aria-hidden]{color:#00161a}
+  #langSw{display:inline-flex;align-items:center;gap:2px;margin-right:6px;font-size:10px;letter-spacing:.1em;color:var(--muted)}
+  #langSw button{background:none;border:0;color:var(--muted);font:inherit;cursor:pointer;padding:6px 4px;text-transform:uppercase}
+  #langSw button:hover{color:var(--text)}
+  #langSw button.on{color:var(--accent)}
+  @media(max-width:480px){.btn.don{padding:10px 12px}}
 
   /* ---------- shared framing ---------- */
   .wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
   .eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
   .eyebrow::before{content:"// "}
-  section{border-bottom:1px solid var(--line-dim);padding:clamp(48px,8vw,92px) 0}
+  section{border-bottom:1px solid var(--line-dim);padding:clamp(48px,8vw,92px) 0;scroll-margin-top:64px}
 
   /* ---------- hero ---------- */
   .hero{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(28px,5vw,64px);
@@ -58,10 +66,10 @@
   h1 em{font-style:normal;color:var(--accent)}
   .lede{color:var(--muted);margin-top:18px;max-width:44ch}
   .lede strong{color:var(--text);font-weight:400}
-  .cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
-  .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;font-size:10px;
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+  .meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;font-size:10px;
     letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .meta b{color:var(--accent);font-weight:400}
+  .meta b{color:var(--muted);font-weight:400}
 
   /* ---------- demo (signature element) ---------- */
   .demo{position:relative;border:1px solid var(--line);background:var(--panel);padding:11px}
@@ -82,7 +90,7 @@
   .cell{background:var(--bg);padding:22px 20px 26px}
   .cell h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:9px}
   .cell p{color:var(--muted);font-size:13px}
-  .cell .k{color:var(--accent);font-size:10px;letter-spacing:.18em;display:block;margin-bottom:12px}
+  .cell .k{color:var(--muted);font-size:9.5px;letter-spacing:.18em;display:block;margin-bottom:12px}
 
   /* ---------- tutorial ---------- */
   .steps{margin-top:34px;border-top:1px solid var(--line-dim)}
@@ -135,10 +143,12 @@
     Free&nbsp;Mapper
   </a>
   <nav>
-    <a class="lnk opt" href="#funktionen">Funktionen</a>
+    <span id="langSw"><button data-l="en" class="on">EN</button><span>/</span><button data-l="de">DE</button><span>/</span><button data-l="es">ES</button></span>
+    <a class="lnk opt" href="#funktionen" data-i18n="navFeat">Funktionen</a>
     <a class="lnk" href="#tutorial">Tutorial</a>
-    <a class="lnk opt" href="#spenden">Spenden</a>
-    <a class="btn pri" href="app.html">Tool starten</a>
+    
+    <a class="btn don" href="https://ko-fi.com/bubadesign" target="_blank" rel="noopener"><span aria-hidden="true">♥</span>&nbsp;<span data-i18n="donate">Spenden</span></a>
+    <a class="btn pri" href="app.html" data-i18n="ctaOpen">Tool starten</a>
   </nav>
 </header>
 
@@ -148,16 +158,17 @@
   <div class="wrap">
     <div class="hero">
       <div>
-        <p class="eyebrow">Projection Mapping · Browser · Kostenlos</p>
-        <h1>Licht<br>auf jede<br><em>Form</em></h1>
-        <p class="lede">Free Mapper legt Videos und Bilder passgenau auf reale Objekte —
+        <p class="eyebrow" data-i18n="heroEye">Projection Mapping · Browser · Kostenlos</p>
+        <h1 data-i18n="h1">Licht<br>auf jede<br><em>Form</em></h1>
+        <p class="lede" data-i18n="lede">Free Mapper legt Videos und Bilder passgenau auf reale Objekte —
           Wände, Möbel, Fassaden, Bühnenbilder. <strong>Läuft direkt im Browser,
           ohne Installation, ohne Wasserzeichen.</strong></p>
         <div class="cta">
-          <a class="btn pri" href="app.html">Tool starten</a>
-          <a class="btn" href="#tutorial">In 6 Schritten loslegen</a>
+          <a class="btn pri" href="app.html" data-i18n="ctaOpen">Tool starten</a>
+          <a class="btn" href="#tutorial" data-i18n="ctaSteps">In 6 Schritten loslegen</a>
+          <a class="btn" href="https://ko-fi.com/bubadesign" target="_blank" rel="noopener"><span style="color:var(--accent)">♥</span>&nbsp;<span data-i18n="donKofi">Auf Ko-fi spenden</span></a>
         </div>
-        <div class="meta">
+        <div class="meta" data-i18n="meta">
           <span>Beamer <b>+</b> Laptop</span>
           <span>Chrome <b>/</b> Safari</span>
           <span>Kein Konto <b>·</b> Keine Daten</span>
@@ -166,9 +177,8 @@
 
       <!-- signature: draggable mapping demo -->
       <div class="demo">
-        <div class="demoHead"><b>◆</b> Ausgabe — Fläche 1<span id="demoRead">Quad 1×1</span></div>
+        <div class="demoHead" data-i18n="demoHead"><b>◆</b> Eckpunkte ziehen — so wird gemappt<span id="demoRead">Quad 1×1</span></div>
         <canvas id="demo" width="880" height="580"></canvas>
-        <div class="demoFoot">Eckpunkte ziehen — genau so wird gemappt</div>
       </div>
     </div>
   </div>
@@ -176,26 +186,26 @@
   <!-- ============ FUNKTIONEN ============ -->
   <section id="funktionen">
     <div class="wrap">
-      <p class="eyebrow">Funktionen</p>
+      <p class="eyebrow" data-i18n="featEye">Funktionen</p>
       <div class="grid">
         <div class="cell"><span class="k">FLÄCHEN</span>
-          <h3>Mappen &amp; Warpen</h3>
-          <p>Eckpunkte ziehen, Mesh unterteilen, Kanten über Bézier-Griffe krümmen. Pfeiltasten justieren pixelgenau.</p></div>
+          <h3 data-i18n="f1h">Mappen &amp; Warpen</h3>
+          <p data-i18n="f1p">Eckpunkte ziehen, Mesh unterteilen, Kanten über Bézier-Griffe krümmen. Pfeiltasten justieren pixelgenau.</p></div>
         <div class="cell"><span class="k">FORMEN</span>
-          <h3>Pen-Tool &amp; Basisformen</h3>
-          <p>Freie Polygone zeichnen oder Rechteck, Kreis, Stern setzen — und Inhalte hineinladen.</p></div>
+          <h3 data-i18n="f2h">Pen-Tool &amp; Basisformen</h3>
+          <p data-i18n="f2p">Freie Polygone zeichnen oder Rechteck, Kreis, Stern setzen — und Inhalte hineinladen.</p></div>
         <div class="cell"><span class="k">QUELLE</span>
-          <h3>Input-Warp</h3>
-          <p>Eigener Arbeitsbereich, in dem du festlegst, welcher Ausschnitt der Quelle auf die Fläche kommt — inklusive Verzerrung.</p></div>
+          <h3 data-i18n="f3h">Input-Warp</h3>
+          <p data-i18n="f3p">Eigener Arbeitsbereich, in dem du festlegst, welcher Ausschnitt der Quelle auf die Fläche kommt — inklusive Verzerrung.</p></div>
         <div class="cell"><span class="k">MASKEN</span>
-          <h3>Ausstanzen</h3>
-          <p>Störende Stellen wie Fenster, Türrahmen oder Steckdosen sauber aus der Projektion nehmen.</p></div>
+          <h3 data-i18n="f4h">Ausstanzen</h3>
+          <p data-i18n="f4p">Störende Stellen wie Fenster, Türrahmen oder Steckdosen sauber aus der Projektion nehmen.</p></div>
         <div class="cell"><span class="k">MEDIEN</span>
-          <h3>Video, Bild, Generator</h3>
-          <p>Eigenes Material in Originalauflösung, dazu Testbilder zum Ausrichten und Loops wie Wolken, Wellen oder Blitze.</p></div>
+          <h3 data-i18n="f5h">Video, Bild, Generator</h3>
+          <p data-i18n="f5p">Eigenes Material in Originalauflösung, dazu Testbilder zum Ausrichten und Loops wie Wolken, Wellen oder Blitze.</p></div>
         <div class="cell"><span class="k">PROJEKT</span>
-          <h3>Speichern mit Inhalt</h3>
-          <p>Eine Datei, alles drin — Geometrie und Medien. Beim nächsten Mal öffnen und weitermachen.</p></div>
+          <h3 data-i18n="f6h">Speichern mit Inhalt</h3>
+          <p data-i18n="f6p">Eine Datei, alles drin — Geometrie und Medien. Beim nächsten Mal öffnen und weitermachen.</p></div>
       </div>
     </div>
   </section>
@@ -203,54 +213,54 @@
   <!-- ============ TUTORIAL ============ -->
   <section id="tutorial">
     <div class="wrap">
-      <p class="eyebrow">Tutorial · Vom Aufbau bis zur Projektion</p>
+      <p class="eyebrow" data-i18n="tutEye">Tutorial · Vom Aufbau bis zur Projektion</p>
       <div class="steps">
 
         <div class="step"><div class="no">01</div><div>
-          <h3>Beamer anschließen</h3>
-          <p>Beamer per HDMI mit dem Laptop verbinden. Stell ihn möglichst frontal und im rechten Winkel zur Fläche — das erspart später viel Korrektur. Fokus einstellen und die automatische Trapezkorrektur am Beamer ausschalten.</p>
+          <h3 data-i18n="s1h">Beamer anschließen</h3>
+          <p data-i18n="s1p">Beamer per HDMI mit dem Laptop verbinden. Stell ihn möglichst frontal und im rechten Winkel zur Fläche — das erspart später viel Korrektur. Fokus einstellen und die automatische Trapezkorrektur am Beamer ausschalten.</p>
         </div></div>
 
         <div class="step"><div class="no">02</div><div>
-          <h3>Bildschirm erweitern</h3>
-          <p>Der Beamer muss als <em>zweiter</em> Bildschirm laufen, nicht gespiegelt.</p>
-          <p>macOS: <code>Systemeinstellungen → Displays</code> → Beamer auswählen → <code>Use as: Extended Display</code>. Windows: <code>Win + P → Erweitern</code>.</p>
+          <h3 data-i18n="s2h">Bildschirm erweitern</h3>
+          <p data-i18n="s2p1">Der Beamer muss als <em>zweiter</em> Bildschirm laufen, nicht gespiegelt.</p>
+          <p data-i18n="s2p2">macOS: <code>Systemeinstellungen → Displays</code> → Beamer auswählen → <code>Use as: Extended Display</code>. Windows: <code>Win + P → Erweitern</code>.</p>
         </div></div>
 
         <div class="step"><div class="no">03</div><div>
-          <h3>Fläche anlegen</h3>
-          <p>Tool starten, Browserfenster auf den Beamer ziehen, <code>Vollbild</code>. Über <code>+ Neu</code> eine Fläche oder Form erzeugen — oder mit dem Pen-Tool den Umriss deines Objekts nachzeichnen.</p>
+          <h3 data-i18n="s3h">Fläche anlegen</h3>
+          <p data-i18n="s3p">Tool starten, Browserfenster auf den Beamer ziehen, <code>Vollbild</code>. Über <code>+ Neu</code> eine Fläche oder Form erzeugen — oder mit dem Pen-Tool den Umriss deines Objekts nachzeichnen.</p>
         </div></div>
 
         <div class="step"><div class="no">04</div><div>
-          <h3>Medium laden</h3>
-          <p>Video oder Bild einfügen. Zum Ausrichten hilft das Raster-Testbild aus dem Generator-Menü. Tipp: Material mit schwarzem Hintergrund rendern — Schwarz bleibt bei der Projektion unsichtbar.</p>
+          <h3 data-i18n="s4h">Medium laden</h3>
+          <p data-i18n="s4p">Video oder Bild einfügen. Zum Ausrichten hilft das Raster-Testbild aus dem Generator-Menü. Tipp: Material mit schwarzem Hintergrund rendern — Schwarz bleibt bei der Projektion unsichtbar.</p>
         </div></div>
 
         <div class="step"><div class="no">05</div><div>
-          <h3>Auf das Objekt mappen</h3>
-          <p>Eckpunkte auf die realen Kanten ziehen. Für gewölbte Flächen das Mesh mit <code>+</code> unterteilen, für runde Kanten die Bézier-Griffe herausziehen. Störende Stellen mit einer Maske ausstanzen.</p>
-          <p>Soll nur ein Ausschnitt der Quelle laufen: <code>Input</code> öffnen und den Bereich festlegen.</p>
+          <h3 data-i18n="s5h">Auf das Objekt mappen</h3>
+          <p data-i18n="s5p1">Eckpunkte auf die realen Kanten ziehen. Für gewölbte Flächen das Mesh mit <code>+</code> unterteilen, für runde Kanten die Bézier-Griffe herausziehen. Störende Stellen mit einer Maske ausstanzen.</p>
+          <p data-i18n="s5p2">Soll nur ein Ausschnitt der Quelle laufen: <code>Input</code> öffnen und den Bereich festlegen.</p>
         </div></div>
 
         <div class="step"><div class="no">06</div><div>
-          <h3>Live Mode</h3>
-          <p><code>Live Mode</code> blendet alle Bedienelemente, Punkte und den Mauszeiger aus — es bleibt nur die reine Projektion. <code>Esc</code> holt die Oberfläche zurück.</p>
-          <p>Am Ende <code>Speichern</code>: Geometrie und Medien landen in einer Datei, die du jederzeit wieder laden kannst.</p>
+          <h3 data-i18n="s6h">Live Mode</h3>
+          <p data-i18n="s6p1"><code>Live Mode</code> blendet alle Bedienelemente, Punkte und den Mauszeiger aus — es bleibt nur die reine Projektion. <code>Esc</code> holt die Oberfläche zurück.</p>
+          <p data-i18n="s6p2">Am Ende <code>Speichern</code>: Geometrie und Medien landen in einer Datei, die du jederzeit wieder laden kannst.</p>
         </div></div>
 
       </div>
 
-      <p class="eyebrow" style="margin-top:44px">Tastatur</p>
+      <p class="eyebrow" style="margin-top:44px" data-i18n="keysEye">Tastatur</p>
       <div class="keys">
-        <div class="key"><b>I / O</b><span>Input · Output</span></div>
-        <div class="key"><b>F</b><span>Vollbild</span></div>
-        <div class="key"><b>H</b><span>Live Mode</span></div>
-        <div class="key"><b>Esc</b><span>Zurück</span></div>
-        <div class="key"><b>↑↓←→</b><span>Fein justieren</span></div>
-        <div class="key"><b>⇧ / ⌥</b><span>Grob · Sehr fein</span></div>
-        <div class="key"><b>+ / −</b><span>Mesh &amp; Punkte</span></div>
-        <div class="key"><b>⌘Z</b><span>Rückgängig</span></div>
+        <div class="key"><b data-i18n="k1">I / O</b><span>Input · Output</span></div>
+        <div class="key"><b data-i18n="k2">F</b><span>Vollbild</span></div>
+        <div class="key"><b data-i18n="k3">H</b><span>Live Mode</span></div>
+        <div class="key"><b data-i18n="k4">Esc</b><span>Zurück</span></div>
+        <div class="key"><b data-i18n="k5">↑↓←→</b><span>Fein justieren</span></div>
+        <div class="key"><b data-i18n="k6">⇧ / ⌥</b><span>Grob · Sehr fein</span></div>
+        <div class="key"><b data-i18n="k7">+ / −</b><span>Mesh &amp; Punkte</span></div>
+        <div class="key"><b data-i18n="k8">⌘Z</b><span>Rückgängig</span></div>
       </div>
     </div>
   </section>
@@ -258,16 +268,16 @@
   <!-- ============ UNTERSTUETZEN ============ -->
   <section id="spenden">
     <div class="wrap">
-      <p class="eyebrow">Unterstützen</p>
+      <p class="eyebrow" data-i18n="supEye">Unterstützen</p>
       <div class="support">
         <div>
-          <h3>Free Mapper bleibt kostenlos</h3>
-          <p>Keine Lizenz, kein Abo, kein Wasserzeichen. Wenn dir das Werkzeug bei einem Projekt
+          <h3 data-i18n="supH">Free Mapper bleibt kostenlos</h3>
+          <p data-i18n="supP">Keine Lizenz, kein Abo, kein Wasserzeichen. Wenn dir das Werkzeug bei einem Projekt
             geholfen hat, kannst du die Weiterentwicklung mit einer Spende unterstützen —
             freiwillig und in jeder Höhe.</p>
         </div>
         <!-- ↓↓↓ KO-FI-LINK HIER EINTRAGEN ↓↓↓ -->
-        <a class="btn pri" href="https://ko-fi.com/bubadesign" target="_blank" rel="noopener">Auf Ko-fi unterstützen</a>
+        <a class="btn pri" href="https://ko-fi.com/bubadesign" target="_blank" rel="noopener" data-i18n="supBtn">Auf Ko-fi unterstützen</a>
         <!-- ↑↑↑ KO-FI-LINK HIER EINTRAGEN ↑↑↑ -->
       </div>
     </div>
@@ -275,18 +285,18 @@
 
   <!-- ============ CLOSE ============ -->
   <div class="wrap close">
-    <p class="eyebrow">Bereit</p>
-    <h2>Beamer an,<br>Fenster auf,<br>los geht's.</h2>
-    <a class="btn pri" href="app.html">Tool starten</a>
+    <p class="eyebrow" data-i18n="clEye">Bereit</p>
+    <h2 data-i18n="clH">Beamer an,<br>Fenster auf,<br>los geht's.</h2>
+    <a class="btn pri" href="app.html" data-i18n="ctaOpen">Tool starten</a>
   </div>
 
 </main>
 
 <footer>
   <span>Free Mapper</span>
-  <a href="impressum.html">Impressum &amp; Datenschutz</a>
-  <a href="#spenden">Spenden</a>
-  <span class="sep">Benötigt WebGL · Chrome oder Safari</span>
+  <a href="impressum.html" data-i18n="ftImp">Impressum &amp; Datenschutz</a>
+  <a href="#spenden" data-i18n="ftDon">Spenden</a>
+  <span class="sep" data-i18n="ftReq">Benötigt WebGL · Chrome oder Safari</span>
 </footer>
 
 <script>
@@ -349,6 +359,86 @@
   cv.addEventListener('touchmove',move,{passive:false});
   window.addEventListener('touchend',up);
   draw();
+})();
+</script>
+
+<script>
+"use strict";
+(function(){
+const D={
+ navFeat:{en:'Features',es:'Funciones'},
+ donate:{en:'Donate',es:'Donar'},
+ donKofi:{en:'Support on Ko-fi',es:'Apoyar en Ko-fi'},
+ heroEye:{en:'Projection mapping · Browser · Free',es:'Projection mapping · Navegador · Gratis'},
+ h1:{en:'Light<br>on any<br><em>shape</em>',es:'Luz<br>sobre toda<br><em>forma</em>'},
+ lede:{en:'Free Mapper fits videos and images precisely onto real objects — walls, furniture, façades, stage sets. <strong>Runs right in the browser, no install, no watermark.</strong>',
+       es:'Free Mapper proyecta vídeos e imágenes con precisión sobre objetos reales — paredes, muebles, fachadas, escenografías. <strong>Funciona directamente en el navegador, sin instalación y sin marca de agua.</strong>'},
+ ctaOpen:{en:'Open the tool',es:'Abrir la herramienta'},
+ ctaSteps:{en:'Start in 6 steps',es:'Empieza en 6 pasos'},
+ meta:{en:'<span>Projector <b>+</b> laptop</span><span>Chrome <b>/</b> Safari</span><span>No account <b>·</b> No data</span>',
+       es:'<span>Proyector <b>+</b> portátil</span><span>Chrome <b>/</b> Safari</span><span>Sin cuenta <b>·</b> Sin datos</span>'},
+ demoHead:{en:'<b>◆</b> Drag the corners — this is how mapping works<span id="demoRead">Quad 1×1</span>',
+           es:'<b>◆</b> Arrastra las esquinas — así funciona el mapeo<span id="demoRead">Quad 1×1</span>'},
+ featEye:{en:'Features',es:'Funciones'},
+ f1h:{en:'Map &amp; warp',es:'Mapear y deformar'},
+ f1p:{en:'Drag corner points, subdivide the mesh, curve edges with Bézier handles. Arrow keys nudge pixel-perfectly.',es:'Arrastra esquinas, subdivide la malla, curva bordes con tiradores Bézier. Las flechas ajustan al píxel.'},
+ f2h:{en:'Pen tool &amp; shapes',es:'Pluma y formas'},
+ f2p:{en:'Draw free polygons or drop in rectangles, circles, stars — then load content into them.',es:'Dibuja polígonos libres o inserta rectángulos, círculos, estrellas — y carga contenido dentro.'},
+ f3h:{en:'Input warp',es:'Input warp'},
+ f3p:{en:'A dedicated workspace to choose which part of the source lands on the surface — distortion included.',es:'Un espacio propio para elegir qué parte de la fuente llega a la superficie — distorsión incluida.'},
+ f4h:{en:'Masks',es:'Máscaras'},
+ f4p:{en:'Cleanly cut windows, door frames or sockets out of the projection.',es:'Recorta ventanas, marcos o enchufes de la proyección con precisión.'},
+ f5h:{en:'Video, image, generator',es:'Vídeo, imagen, generador'},
+ f5p:{en:'Your own media at full resolution, plus test patterns and loops like clouds, waves or lightning.',es:'Tus medios a resolución completa, más patrones de prueba y loops como nubes, olas o rayos.'},
+ f6h:{en:'Save with media',es:'Guardar con medios'},
+ f6p:{en:'One file, everything inside — geometry and media. Open it next time and continue.',es:'Un archivo con todo — geometría y medios. Ábrelo la próxima vez y continúa.'},
+ tutEye:{en:'Tutorial · From setup to projection',es:'Tutorial · Del montaje a la proyección'},
+ s1h:{en:'Connect the projector',es:'Conecta el proyector'},
+ s1p:{en:'Connect the projector via HDMI. Place it as straight-on as possible — it saves a lot of correction later. Set the focus and switch off the projector’s automatic keystone.',es:'Conecta el proyector por HDMI. Colócalo lo más frontal posible — ahorra mucha corrección. Ajusta el foco y desactiva el keystone automático.'},
+ s2h:{en:'Extend the display',es:'Extiende la pantalla'},
+ s2p1:{en:'The projector must run as a <em>second</em> display, not mirrored.',es:'El proyector debe funcionar como <em>segunda</em> pantalla, no duplicada.'},
+ s2p2:{en:'macOS: <code>System Settings → Displays</code> → select projector → <code>Use as: Extended Display</code>. Windows: <code>Win + P → Extend</code>.',es:'macOS: <code>Ajustes → Pantallas</code> → elige el proyector → <code>Usar como: pantalla extendida</code>. Windows: <code>Win + P → Extender</code>.'},
+ s3h:{en:'Create a surface',es:'Crea una superficie'},
+ s3p:{en:'Open the tool, drag the browser window onto the projector, hit <code>Fullscreen</code>. Use <code>+ New</code> to add a surface or shape — or trace your object with the pen tool.',es:'Abre la herramienta, arrastra la ventana al proyector y pulsa <code>Pantalla</code>. Con <code>+ Nuevo</code> añade una superficie o forma — o traza tu objeto con la pluma.'},
+ s4h:{en:'Load media',es:'Carga un medio'},
+ s4p:{en:'Add a video or image. The grid test pattern in the generator menu helps with alignment. Tip: render your material on black — black stays invisible when projected.',es:'Añade un vídeo o imagen. El patrón de cuadrícula del generador ayuda a alinear. Consejo: renderiza sobre negro — el negro es invisible al proyectar.'},
+ s5h:{en:'Map it to the object',es:'Mapea el objeto'},
+ s5p1:{en:'Drag the corners onto the real edges. Subdivide the mesh with <code>+</code> for curved surfaces, pull out Bézier handles for round edges, punch out trouble spots with a mask.',es:'Arrastra las esquinas a los bordes reales. Subdivide la malla con <code>+</code> para superficies curvas, saca tiradores Bézier para bordes redondos y usa máscaras para recortar.'},
+ s5p2:{en:'Only want part of the source? Open <code>Input</code> and set the region.',es:'¿Solo una parte de la fuente? Abre <code>Input</code> y define la región.'},
+ s6h:{en:'Live Mode',es:'Live Mode'},
+ s6p1:{en:'<code>Live Mode</code> hides all controls, points and the cursor — only the projection remains. <code>Esc</code> brings the interface back.',es:'<code>Live Mode</code> oculta controles, puntos y cursor — solo queda la proyección. <code>Esc</code> recupera la interfaz.'},
+ s6p2:{en:'Finish with <code>Save</code>: geometry and media go into one file you can reload anytime.',es:'Termina con <code>Guardar</code>: geometría y medios en un archivo que puedes recargar cuando quieras.'},
+ keysEye:{en:'Keyboard',es:'Teclado'},
+ k1:{en:'<b>I / O</b><span>Input · Output</span>',es:'<b>I / O</b><span>Input · Output</span>'},
+ k2:{en:'<b>F</b><span>Fullscreen</span>',es:'<b>F</b><span>Pantalla completa</span>'},
+ k3:{en:'<b>H</b><span>Live Mode</span>',es:'<b>H</b><span>Live Mode</span>'},
+ k4:{en:'<b>Esc</b><span>Back</span>',es:'<b>Esc</b><span>Volver</span>'},
+ k5:{en:'<b>↑↓←→</b><span>Nudge</span>',es:'<b>↑↓←→</b><span>Ajustar</span>'},
+ k6:{en:'<b>⇧ / ⌥</b><span>Coarse · Fine</span>',es:'<b>⇧ / ⌥</b><span>Grueso · Fino</span>'},
+ k7:{en:'<b>+ / −</b><span>Mesh &amp; points</span>',es:'<b>+ / −</b><span>Malla y puntos</span>'},
+ k8:{en:'<b>⌘Z</b><span>Undo</span>',es:'<b>⌘Z</b><span>Deshacer</span>'},
+ supEye:{en:'Support',es:'Apoya'},
+ supH:{en:'Free Mapper stays free',es:'Free Mapper sigue gratis'},
+ supP:{en:'No license, no subscription, no watermark. If the tool helped you with a project, you can support its development with a donation — voluntary, any amount.',es:'Sin licencia, sin suscripción, sin marca de agua. Si te ayudó en un proyecto, puedes apoyar su desarrollo con una donación — voluntaria y de cualquier importe.'},
+ supBtn:{en:'Support on Ko-fi',es:'Apoyar en Ko-fi'},
+ clEye:{en:'Ready',es:'Listo'},
+ clH:{en:'Projector on,<br>window over,<br>let’s go.',es:'Proyector listo,<br>ventana al frente,<br>vamos.'},
+ ftImp:{en:'Imprint &amp; privacy',es:'Aviso legal y privacidad'},
+ ftDon:{en:'Donate',es:'Donar'},
+ ftReq:{en:'Requires WebGL · Chrome or Safari',es:'Requiere WebGL · Chrome o Safari'}
+};
+const DE={};document.querySelectorAll('[data-i18n]').forEach(el=>{DE[el.dataset.i18n]=el.innerHTML;});
+const TITLES={de:'Free Mapper — Projection Mapping im Browser',en:'Free Mapper — Projection mapping in the browser',es:'Free Mapper — Projection mapping en el navegador'};
+let lang='en';try{lang=localStorage.getItem('fm-lang')||'en';}catch(e){}
+if(!['en','de','es'].includes(lang))lang='en';
+function apply(){
+ document.documentElement.lang=lang;document.title=TITLES[lang]||TITLES.en;
+ document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;
+   el.innerHTML=lang==='de'?DE[k]:(D[k]&&D[k][lang])||DE[k];});
+ document.querySelectorAll('#langSw button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));}
+document.querySelectorAll('#langSw button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;
+ try{localStorage.setItem('fm-lang',lang);}catch(e){}apply();});
+apply();
 })();
 </script>
 </body>
