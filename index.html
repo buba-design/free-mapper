@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Mapper — Projection Mapping im Browser</title>
+<meta name="description" content="Kostenloses Projection-Mapping-Werkzeug für Beamer. Läuft direkt im Browser, ohne Installation, ohne Wasserzeichen.">
+<meta property="og:title" content="Free Mapper — Projection Mapping im Browser">
+<meta property="og:description" content="Kostenloses Projection-Mapping-Werkzeug für Beamer. Läuft direkt im Browser, ohne Installation, ohne Wasserzeichen.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#000;--panel:#06080a;--line:rgba(255,255,255,.24);--line-dim:rgba(255,255,255,.09);
+    --text:#e6e8ea;--muted:#6f7782;--accent:#4dd9e6;--accent-dim:#1e6e78;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+    --pad:clamp(16px,4vw,40px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:14px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;
+    padding:12px var(--pad);border-bottom:1px solid var(--line);background:rgba(0,0,0,.88);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;font-weight:700;white-space:nowrap}
+  .brand .logo{color:var(--accent);flex:none;display:block}
+  header nav{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .lnk{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    padding:8px 10px;transition:color .15s}
+  .lnk:hover{color:var(--text)}
+  @media(max-width:640px){.lnk.opt{display:none}}
+
+  .btn{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--text);background:transparent;border:1px solid var(--line);
+    padding:10px 16px;cursor:pointer;transition:.12s;white-space:nowrap}
+  .btn:hover{background:rgba(255,255,255,.1);border-color:var(--text)}
+  .btn.pri{background:var(--accent);border-color:var(--accent);color:#00161a;font-weight:700}
+  .btn.pri:hover{filter:brightness(1.09);background:var(--accent)}
+
+  /* ---------- shared framing ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+  .eyebrow{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .eyebrow::before{content:"// "}
+  section{border-bottom:1px solid var(--line-dim);padding:clamp(48px,8vw,92px) 0}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(28px,5vw,64px);
+    align-items:center;padding-top:clamp(40px,6vw,72px)}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:34px}}
+  h1{font-size:clamp(34px,6.4vw,68px);line-height:.98;letter-spacing:-.035em;font-weight:700;
+    text-transform:uppercase;margin:16px 0 0}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{color:var(--muted);margin-top:18px;max-width:44ch}
+  .lede strong{color:var(--text);font-weight:400}
+  .cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+  .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .meta b{color:var(--accent);font-weight:400}
+
+  /* ---------- demo (signature element) ---------- */
+  .demo{position:relative;border:1px solid var(--line);background:var(--panel);padding:11px}
+  .demo::before,.demo::after{content:"";position:absolute;width:9px;height:9px;pointer-events:none}
+  .demo::before{top:4px;left:4px;border-top:1px solid var(--accent);border-left:1px solid var(--accent)}
+  .demo::after{bottom:4px;right:4px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent)}
+  .demoHead{display:flex;align-items:center;gap:10px;padding:1px 3px 10px;font-size:9.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .demoHead b{color:var(--accent);font-weight:400}
+  .demoHead span{margin-left:auto;font-variant-numeric:tabular-nums}
+  #demo{display:block;width:100%;height:auto;background:#000;touch-action:none;cursor:grab}
+  #demo.drag{cursor:grabbing}
+  .demoFoot{padding:9px 3px 1px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---------- features ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;
+    background:var(--line-dim);border:1px solid var(--line-dim);margin-top:32px}
+  .cell{background:var(--bg);padding:22px 20px 26px}
+  .cell h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:9px}
+  .cell p{color:var(--muted);font-size:13px}
+  .cell .k{color:var(--accent);font-size:10px;letter-spacing:.18em;display:block;margin-bottom:12px}
+
+  /* ---------- tutorial ---------- */
+  .steps{margin-top:34px;border-top:1px solid var(--line-dim)}
+  .step{display:grid;grid-template-columns:64px minmax(0,1fr);gap:clamp(14px,3vw,34px);
+    padding:24px 0;border-bottom:1px solid var(--line-dim)}
+  @media(max-width:620px){.step{grid-template-columns:44px minmax(0,1fr);gap:14px}}
+  .step .no{font-size:clamp(20px,3vw,30px);line-height:1;color:var(--accent);letter-spacing:-.03em}
+  .step h3{font-size:14px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+  .step p{color:var(--muted);max-width:70ch}
+  .step p+p{margin-top:8px}
+  .step code{color:var(--text);background:rgba(255,255,255,.07);padding:1px 6px;font-size:12.5px}
+
+  /* ---------- keys ---------- */
+  .keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
+    background:var(--line-dim);border:1px solid var(--line-dim);margin-top:34px}
+  .key{background:var(--bg);padding:13px 16px;display:flex;align-items:center;gap:12px;font-size:12px}
+  .key b{color:var(--accent);font-weight:400;min-width:62px;letter-spacing:.06em}
+  .key span{color:var(--muted)}
+
+  /* ---------- closing ---------- */
+  .close{text-align:center;padding:clamp(52px,9vw,104px) 0}
+  .close h2{font-size:clamp(24px,4.4vw,44px);line-height:1.05;letter-spacing:-.03em;
+    text-transform:uppercase;font-weight:700;margin:14px 0 20px}
+  footer{padding:26px var(--pad) 40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  footer .sep{margin-left:auto}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#top">
+    <svg class="logo" viewBox="180.9 926.8 169.2 216" width="14" height="18" aria-hidden="true">
+      <path d="M320.76,1002.2h-39.93v-46.1c0-12.32-9.98-22.3-22.3-22.3h-48.33c-12.32,0-22.3,9.98-22.3,22.3v88.34c0,12.32,9.98,22.3,22.3,22.3h39.93v46.1c0,12.32,9.98,22.3,22.3,22.3h48.33c12.32,0,22.3-9.98,22.3-22.3v-88.34c0-12.32-9.98-22.3-22.3-22.3ZM336.21,1113.46c0,8.4-6.81,15.22-15.22,15.22h-48.81c-8.4,0-15.22-6.81-15.22-15.22v-89.58c0-8.4,6.81-15.22,15.22-15.22h48.81c8.4,0,15.22,6.81,15.22,15.22v89.58Z"
+        fill="currentColor" stroke="currentColor" stroke-width="14" stroke-miterlimit="10"/>
+    </svg>
+    Free&nbsp;Mapper
+  </a>
+  <nav>
+    <a class="lnk opt" href="#funktionen">Funktionen</a>
+    <a class="lnk" href="#tutorial">Tutorial</a>
+    <a class="btn pri" href="app.html">Tool starten</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Projection Mapping · Browser · Kostenlos</p>
+        <h1>Licht<br>auf jede<br><em>Form</em></h1>
+        <p class="lede">Free Mapper legt Videos und Bilder passgenau auf reale Objekte —
+          Wände, Möbel, Fassaden, Bühnenbilder. <strong>Läuft direkt im Browser,
+          ohne Installation, ohne Wasserzeichen.</strong></p>
+        <div class="cta">
+          <a class="btn pri" href="app.html">Tool starten</a>
+          <a class="btn" href="#tutorial">In 6 Schritten loslegen</a>
+        </div>
+        <div class="meta">
+          <span>Beamer <b>+</b> Laptop</span>
+          <span>Chrome <b>/</b> Safari</span>
+          <span>Kein Konto <b>·</b> Keine Daten</span>
+        </div>
+      </div>
+
+      <!-- signature: draggable mapping demo -->
+      <div class="demo">
+        <div class="demoHead"><b>◆</b> Ausgabe — Fläche 1<span id="demoRead">Quad 1×1</span></div>
+        <canvas id="demo" width="880" height="580"></canvas>
+        <div class="demoFoot">Eckpunkte ziehen — genau so wird gemappt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FUNKTIONEN ============ -->
+  <section id="funktionen">
+    <div class="wrap">
+      <p class="eyebrow">Funktionen</p>
+      <div class="grid">
+        <div class="cell"><span class="k">FLÄCHEN</span>
+          <h3>Mappen &amp; Warpen</h3>
+          <p>Eckpunkte ziehen, Mesh unterteilen, Kanten über Bézier-Griffe krümmen. Pfeiltasten justieren pixelgenau.</p></div>
+        <div class="cell"><span class="k">FORMEN</span>
+          <h3>Pen-Tool &amp; Basisformen</h3>
+          <p>Freie Polygone zeichnen oder Rechteck, Kreis, Stern setzen — und Inhalte hineinladen.</p></div>
+        <div class="cell"><span class="k">QUELLE</span>
+          <h3>Input-Warp</h3>
+          <p>Eigener Arbeitsbereich, in dem du festlegst, welcher Ausschnitt der Quelle auf die Fläche kommt — inklusive Verzerrung.</p></div>
+        <div class="cell"><span class="k">MASKEN</span>
+          <h3>Ausstanzen</h3>
+          <p>Störende Stellen wie Fenster, Türrahmen oder Steckdosen sauber aus der Projektion nehmen.</p></div>
+        <div class="cell"><span class="k">MEDIEN</span>
+          <h3>Video, Bild, Generator</h3>
+          <p>Eigenes Material in Originalauflösung, dazu Testbilder zum Ausrichten und Loops wie Wolken, Wellen oder Blitze.</p></div>
+        <div class="cell"><span class="k">PROJEKT</span>
+          <h3>Speichern mit Inhalt</h3>
+          <p>Eine Datei, alles drin — Geometrie und Medien. Beim nächsten Mal öffnen und weitermachen.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TUTORIAL ============ -->
+  <section id="tutorial">
+    <div class="wrap">
+      <p class="eyebrow">Tutorial · Vom Aufbau bis zur Projektion</p>
+      <div class="steps">
+
+        <div class="step"><div class="no">01</div><div>
+          <h3>Beamer anschließen</h3>
+          <p>Beamer per HDMI mit dem Laptop verbinden. Stell ihn möglichst frontal und im rechten Winkel zur Fläche — das erspart später viel Korrektur. Fokus einstellen und die automatische Trapezkorrektur am Beamer ausschalten.</p>
+        </div></div>
+
+        <div class="step"><div class="no">02</div><div>
+          <h3>Bildschirm erweitern</h3>
+          <p>Der Beamer muss als <em>zweiter</em> Bildschirm laufen, nicht gespiegelt.</p>
+          <p>macOS: <code>Systemeinstellungen → Displays</code> → Beamer auswählen → <code>Use as: Extended Display</code>. Windows: <code>Win + P → Erweitern</code>.</p>
+        </div></div>
+
+        <div class="step"><div class="no">03</div><div>
+          <h3>Fläche anlegen</h3>
+          <p>Tool starten, Browserfenster auf den Beamer ziehen, <code>Vollbild</code>. Über <code>+ Neu</code> eine Fläche oder Form erzeugen — oder mit dem Pen-Tool den Umriss deines Objekts nachzeichnen.</p>
+        </div></div>
+
+        <div class="step"><div class="no">04</div><div>
+          <h3>Medium laden</h3>
+          <p>Video oder Bild einfügen. Zum Ausrichten hilft das Raster-Testbild aus dem Generator-Menü. Tipp: Material mit schwarzem Hintergrund rendern — Schwarz bleibt bei der Projektion unsichtbar.</p>
+        </div></div>
+
+        <div class="step"><div class="no">05</div><div>
+          <h3>Auf das Objekt mappen</h3>
+          <p>Eckpunkte auf die realen Kanten ziehen. Für gewölbte Flächen das Mesh mit <code>+</code> unterteilen, für runde Kanten die Bézier-Griffe herausziehen. Störende Stellen mit einer Maske ausstanzen.</p>
+          <p>Soll nur ein Ausschnitt der Quelle laufen: <code>Input</code> öffnen und den Bereich festlegen.</p>
+        </div></div>
+
+        <div class="step"><div class="no">06</div><div>
+          <h3>Live Mode</h3>
+          <p><code>Live Mode</code> blendet alle Bedienelemente, Punkte und den Mauszeiger aus — es bleibt nur die reine Projektion. <code>Esc</code> holt die Oberfläche zurück.</p>
+          <p>Am Ende <code>Speichern</code>: Geometrie und Medien landen in einer Datei, die du jederzeit wieder laden kannst.</p>
+        </div></div>
+
+      </div>
+
+      <p class="eyebrow" style="margin-top:44px">Tastatur</p>
+      <div class="keys">
+        <div class="key"><b>I / O</b><span>Input · Output</span></div>
+        <div class="key"><b>F</b><span>Vollbild</span></div>
+        <div class="key"><b>H</b><span>Live Mode</span></div>
+        <div class="key"><b>Esc</b><span>Zurück</span></div>
+        <div class="key"><b>↑↓←→</b><span>Fein justieren</span></div>
+        <div class="key"><b>⇧ / ⌥</b><span>Grob · Sehr fein</span></div>
+        <div class="key"><b>+ / −</b><span>Mesh &amp; Punkte</span></div>
+        <div class="key"><b>⌘Z</b><span>Rückgängig</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSE ============ -->
+  <div class="wrap close">
+    <p class="eyebrow">Bereit</p>
+    <h2>Beamer an,<br>Fenster auf,<br>los geht's.</h2>
+    <a class="btn pri" href="app.html">Tool starten</a>
+  </div>
+
+</main>
+
+<footer>
+  <span>Free Mapper</span>
+  <span>Projection Mapping im Browser</span>
+  <span class="sep">Benötigt WebGL · Chrome oder Safari</span>
+</footer>
+
+<script>
+"use strict";
+/* Hero demo: a real projection surface you can warp — the tool's core gesture. */
+(function(){
+  const cv=document.getElementById('demo'),g=cv.getContext('2d'),read=document.getElementById('demoRead');
+  if(!g)return;
+  const W=cv.width,H=cv.height;
+  let P=[{x:.14,y:.17},{x:.87,y:.10},{x:.92,y:.86},{x:.09,y:.79}]; // TL TR BR BL
+  let drag=null,hover=null;
+
+  const px=p=>[p.x*W,p.y*H];
+  const lerp=(a,b,t)=>({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});
+  function at(u,v){return lerp(lerp(P[0],P[1],u),lerp(P[3],P[2],u),v);}
+
+  function draw(){
+    g.clearRect(0,0,W,H);
+    const CO=8,RO=5;
+    // warped checkerboard = the test pattern from the app
+    for(let r=0;r<RO;r++)for(let c=0;c<CO;c++){
+      const a=at(c/CO,r/RO),b=at((c+1)/CO,r/RO),d=at((c+1)/CO,(r+1)/RO),e=at(c/CO,(r+1)/RO);
+      g.beginPath();g.moveTo(a.x*W,a.y*H);g.lineTo(b.x*W,b.y*H);g.lineTo(d.x*W,d.y*H);g.lineTo(e.x*W,e.y*H);g.closePath();
+      g.fillStyle=((r+c)&1)?'#12181f':'#1d2833';g.fill();
+      g.strokeStyle='rgba(77,217,230,.20)';g.lineWidth=1;g.stroke();
+    }
+    // outline
+    g.beginPath();
+    P.forEach((p,i)=>{const q=px(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);});
+    g.closePath();g.strokeStyle='#4dd9e6';g.lineWidth=2.5;g.stroke();
+    // centre crosshair
+    const ct=at(.5,.5),cx=ct.x*W,cy=ct.y*H;
+    g.strokeStyle='rgba(77,217,230,.55)';g.lineWidth=1.5;
+    g.beginPath();g.moveTo(cx-16,cy);g.lineTo(cx+16,cy);g.moveTo(cx,cy-16);g.lineTo(cx,cy+16);g.stroke();
+    // corner handles
+    P.forEach((p,i)=>{const q=px(p),on=(hover===i||drag===i);
+      g.fillStyle=on?'#ffffff':'#4dd9e6';g.fillRect(q[0]-11,q[1]-11,22,22);
+      g.strokeStyle='rgba(0,0,0,.65)';g.lineWidth=2;g.strokeRect(q[0]-11,q[1]-11,22,22);});
+  }
+
+  function pos(e){const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;
+    return{x:(t.clientX-r.left)/r.width,y:(t.clientY-r.top)/r.height};}
+  function near(n){const th=34/Math.max(W,H);
+    for(let i=0;i<4;i++){const d=Math.hypot(P[i].x-n.x,P[i].y-n.y);if(d<th)return i;}return null;}
+
+  function down(e){const i=near(pos(e));if(i===null)return;drag=i;cv.classList.add('drag');e.preventDefault();}
+  function move(e){const n=pos(e);
+    if(drag===null){const h=near(n);if(h!==hover){hover=h;draw();}return;}
+    P[drag]={x:Math.max(.02,Math.min(.98,n.x)),y:Math.max(.03,Math.min(.97,n.y))};
+    read.textContent='X '+Math.round(P[drag].x*100)+' · Y '+Math.round(P[drag].y*100);
+    draw();e.preventDefault();}
+  function up(){if(drag!==null){drag=null;cv.classList.remove('drag');read.textContent='Quad 1×1';draw();}}
+
+  cv.addEventListener('mousedown',down);
+  cv.addEventListener('mousemove',move);
+  cv.addEventListener('mouseleave',()=>{hover=null;draw();});
+  window.addEventListener('mousemove',e=>{if(drag!==null)move(e);});
+  window.addEventListener('mouseup',up);
+  cv.addEventListener('touchstart',down,{passive:false});
+  cv.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('touchend',up);
+  draw();
+})();
+</script>
+</body>
+</html>
